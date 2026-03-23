@@ -1,59 +1,45 @@
 package com.example.andr_lab1
 
 import android.os.Bundle
-import android.widget.*
-import androidx.activity.ComponentActivity
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: OrderViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val etInfo: EditText = findViewById(R.id.etInfo)
-        val tvResult: TextView = findViewById(R.id.tvResult)
-        val btnOk: Button = findViewById(R.id.btnOk)
+        viewModel = ViewModelProvider(this)[OrderViewModel::class.java]
 
-        val cbMargherita: CheckBox = findViewById(R.id.cbMargherita)
-        val cbPepperoni: CheckBox = findViewById(R.id.cbPepperoni)
-        val cbHawaiian: CheckBox = findViewById(R.id.cbHawaiian)
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.inputContainer, InputFragment())
+                .commit()
+        }
 
-        val cbSmall: CheckBox = findViewById(R.id.cbSmall)
-        val cbMedium: CheckBox = findViewById(R.id.cbMedium)
-        val cbLarge: CheckBox = findViewById(R.id.cbLarge)
+        val resultContainer = findViewById<View>(R.id.resultContainer)
 
-        val cbCheese: CheckBox = findViewById(R.id.cbCheese)
-        val cbMushrooms: CheckBox = findViewById(R.id.cbMushrooms)
-        val cbOlives: CheckBox = findViewById(R.id.cbOlives)
+        viewModel.orderData.observe(this) { data ->
+            if (data != null) {
+                resultContainer.visibility = View.VISIBLE
 
-        btnOk.setOnClickListener {
-            val info = etInfo.text.toString().trim()
-
-            val types = mutableListOf<String>()
-            if (cbMargherita.isChecked) types.add("Маргарита")
-            if (cbPepperoni.isChecked) types.add("Пепероні")
-            if (cbHawaiian.isChecked) types.add("Гавайська")
-
-            val sizes = mutableListOf<String>()
-            if (cbSmall.isChecked) sizes.add("Мала (25 см)")
-            if (cbMedium.isChecked) sizes.add("Середня (30 см)")
-            if (cbLarge.isChecked) sizes.add("Велика (35 см)")
-
-            val extras = mutableListOf<String>()
-            if (cbCheese.isChecked) extras.add("Додатковий сир")
-            if (cbMushrooms.isChecked) extras.add("Гриби")
-            if (cbOlives.isChecked) extras.add("Оливки")
-
-            if (info.isEmpty() || types.isEmpty() || sizes.isEmpty()) {
-                Toast.makeText(this, "Завершіть введення всіх даних", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                if (supportFragmentManager.findFragmentById(R.id.resultContainer) == null) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.resultContainer, ResultFragment())
+                        .commit()
+                }
+            } else {
+                supportFragmentManager.findFragmentById(R.id.resultContainer)?.let { fragment ->
+                    supportFragmentManager.beginTransaction()
+                        .remove(fragment)
+                        .commit()
+                }
+                resultContainer.visibility = View.GONE
             }
-
-            tvResult.text =
-                "Замовник/коментар: $info\n" +
-                        "Тип: ${types.joinToString(", ")}\n" +
-                        "Розмір: ${sizes.joinToString(", ")}\n" +
-                        "Додатки: ${if (extras.isEmpty()) "немає" else extras.joinToString(", ")}"
         }
     }
 }
