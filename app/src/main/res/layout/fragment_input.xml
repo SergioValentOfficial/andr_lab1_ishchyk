@@ -26,15 +26,15 @@
             android:id="@+id/etInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Наприклад: Даня, без цибулі"
-            android:layout_marginTop="6dp" />
+            android:layout_marginTop="6dp"
+            android:hint="Наприклад: Даня, без цибулі" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Тип піци:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textStyle="bold" />
 
         <CheckBox
             android:id="@+id/cbMargherita"
@@ -57,9 +57,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Розмір:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textStyle="bold" />
 
         <CheckBox
             android:id="@+id/cbSmall"
@@ -82,9 +82,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="Додатки:"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textStyle="bold" />
 
         <CheckBox
             android:id="@+id/cbCheese"
@@ -108,8 +108,15 @@
             android:id="@+id/btnOk"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ОК"
-            android:layout_marginTop="18dp" />
+            android:layout_marginTop="18dp"
+            android:text="ОК" />
+
+        <Button
+            android:id="@+id/btnOpen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Відкрити" />
 
     </LinearLayout>
 </ScrollView>

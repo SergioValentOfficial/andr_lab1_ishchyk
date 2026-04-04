@@ -1,5 +1,6 @@
 package com.example.andr_lab1
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -20,6 +21,7 @@ class InputFragment : Fragment(R.layout.fragment_input) {
 
         val etInfo: EditText = view.findViewById(R.id.etInfo)
         val btnOk: Button = view.findViewById(R.id.btnOk)
+        val btnOpen: Button = view.findViewById(R.id.btnOpen)
 
         val cbMargherita: CheckBox = view.findViewById(R.id.cbMargherita)
         val cbPepperoni: CheckBox = view.findViewById(R.id.cbPepperoni)
@@ -63,7 +65,25 @@ class InputFragment : Fragment(R.layout.fragment_input) {
                 extras = extras
             )
 
+            val resultText =
+                "Замовник/коментар: ${order.info}\n" +
+                        "Тип: ${order.types.joinToString(", ")}\n" +
+                        "Розмір: ${order.sizes.joinToString(", ")}\n" +
+                        "Додатки: ${if (order.extras.isEmpty()) "немає" else order.extras.joinToString(", ")}"
+
             viewModel.setOrder(order)
+
+            try {
+                StorageHelper.saveOrder(requireContext(), resultText)
+                Toast.makeText(requireContext(), "Дані успішно збережено", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Помилка збереження", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        btnOpen.setOnClickListener {
+            val intent = Intent(requireContext(), StorageActivity::class.java)
+            startActivity(intent)
         }
 
         viewModel.clearFormEvent.observe(viewLifecycleOwner) { eventValue ->
